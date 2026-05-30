@@ -27,14 +27,18 @@ class AuthService
             throw new \InvalidArgumentException('Informe email e senha.');
         }
 
-        if (! $this->credentialsAreValid($email, $password)) {
-            throw new \DomainException('Credenciais invalidas.');
-        }
-
         $usuario = $this->usuarioRepository->findByEmail($email);
 
         if ($usuario === null || ! isset($usuario['id'])) {
-            throw new \OutOfBoundsException('Usuario nao encontrado.');
+            throw new \DomainException('Credenciais invalidas.');
+        }
+
+        if (($usuario['status'] ?? '') !== 'ATIVO') {
+            throw new \DomainException('Usuario inativo.');
+        }
+
+        if (! $this->credentialsAreValid($email, $password)) {
+            throw new \DomainException('Credenciais invalidas.');
         }
 
         session()->set([

@@ -19,6 +19,7 @@ class UsuarioRepository
     public function findByEmail(string $email): ?array
     {
         $usuario = $this->usuarioModel
+            ->select('id, cpf, apelido, email, senha, status, nivel')
             ->where('email', $email)
             ->first();
 
@@ -31,7 +32,7 @@ class UsuarioRepository
     public function findAll(): array
     {
         return $this->usuarioModel
-            ->select('id, email')
+            ->select('id, cpf, apelido, email, status, nivel')
             ->orderBy('id', 'ASC')
             ->findAll();
     }

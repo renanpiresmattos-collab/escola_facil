@@ -67,7 +67,8 @@ loginForm.addEventListener('submit', async (event) => {
             localStorage.setItem('access_token', data.access_token);
         }
 
-        setMessage('success', 'Login realizado com sucesso.');
+        setMessage('success', 'Login realizado com sucesso. Redirecionando...');
+        window.location.href = '/dashboard';
     } catch (error) {
         setMessage('error', 'Falha de conexao. Tente novamente em instantes.');
     } finally {

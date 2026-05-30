@@ -17,6 +17,7 @@ if (! function_exists('api_service_response')) {
             $code = ResponseInterface::HTTP_OK;
             $message = '';
             $data = null;
+            $meta = null;
 
             if (is_array($result)) {
                 // Extrair message se existir (payload estruturado do service)
@@ -31,6 +32,10 @@ if (! function_exists('api_service_response')) {
                         $data = $result;
                     }
                 }
+
+                if (isset($result['meta'])) {
+                    $meta = $result['meta'];
+                }
             } else {
                 // retorno escalar -> usar como mensagem
                 $message = (string) $result;
@@ -43,6 +48,10 @@ if (! function_exists('api_service_response')) {
 
             if ($data !== null) {
                 $payload['data'] = $data;
+            }
+
+            if ($meta !== null) {
+                $payload['meta'] = $meta;
             }
 
             return $response->setStatusCode($code)->setJSON($payload);
