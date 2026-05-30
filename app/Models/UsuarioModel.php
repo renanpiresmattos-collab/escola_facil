@@ -10,7 +10,13 @@ class UsuarioModel extends Model
     protected $primaryKey = 'id';
     protected $returnType = 'array';
     protected $allowedFields = [
+        'cpf',
+        'apelido',
         'email',
         'senha',
+        'data_insert',
+        'data_update',
+        'status',
+        'nivel',
     ];
 }

@@ -3,6 +3,7 @@
 namespace Config;
 
 use App\Services\AuthService;
+use App\Services\RupService;
 use App\Services\UsuarioService;
 use CodeIgniter\Config\BaseService;
 
@@ -37,5 +38,14 @@ class Services extends BaseService
         }
 
         return new UsuarioService();
+    }
+
+    public static function rupService($getShared = true): RupService
+    {
+        if ($getShared) {
+            return static::getSharedInstance('rupService');
+        }
+
+        return new RupService();
     }
 }
