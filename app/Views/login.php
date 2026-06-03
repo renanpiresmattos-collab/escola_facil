@@ -9,8 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/css/app.css" rel="stylesheet">
 </head>
-<body>
-    <main class="app-page d-grid p-4 p-md-5">
+<body class="login-page">
+    <main class="app-page d-grid p-0">
         <section class="app-shell container bg-white p-0 m-auto" aria-label="Login">
             <div class="row g-0">
                 <aside class="app-brand-panel d-none d-md-flex col-md-5 p-5" aria-hidden="true">

@@ -9,7 +9,7 @@ class Rup extends BaseController
     public function index()
     {
         return view('rup/index', [
-            'pageTitle' => 'RUP',
+            'pageTitle' => 'Cadastro',
             'activeMenu' => 'Cadastro',
             'activeSubmenu' => 'RUP',
         ]);
@@ -18,7 +18,7 @@ class Rup extends BaseController
     public function create()
     {
         return view('rup/form', [
-            'pageTitle' => 'Incluir RUP',
+            'pageTitle' => 'Incluir Pessoa',
             'activeMenu' => 'Cadastro',
             'activeSubmenu' => 'RUP',
             'mode' => 'create',
@@ -28,7 +28,7 @@ class Rup extends BaseController
     public function edit(int $id)
     {
         return view('rup/form', [
-            'pageTitle' => 'Editar RUP',
+            'pageTitle' => 'Editar Pessoa',
             'activeMenu' => 'Cadastro',
             'activeSubmenu' => 'RUP',
             'mode' => 'edit',

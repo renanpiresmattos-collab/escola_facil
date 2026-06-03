@@ -18,6 +18,7 @@ class MenuController extends BaseController
                 'title' => 'Cadastro',
                 'submenu' => [
                     ['title' => 'RUP', 'url' => site_url('rup')],
+                    ['title' => 'Alunos', 'url' => site_url('alunos')],
                 ],
             ],
             [

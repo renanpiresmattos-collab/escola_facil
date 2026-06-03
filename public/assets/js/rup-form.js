@@ -49,6 +49,27 @@ document.addEventListener('DOMContentLoaded', function () {
         return v.replace(/^(\d{5})(\d)/, '$1-$2');
     }
 
+    function isValidCpf(value) {
+        const cpfDigits = digits(value);
+        if (cpfDigits.length !== 11 || /^(\d)\1{10}$/.test(cpfDigits)) {
+            return false;
+        }
+
+        for (let t = 9; t < 11; t++) {
+            let sum = 0;
+            for (let i = 0; i < t; i++) {
+                sum += parseInt(cpfDigits.charAt(i), 10) * ((t + 1) - i);
+            }
+
+            const check = ((sum * 10) % 11) % 10;
+            if (check !== parseInt(cpfDigits.charAt(t), 10)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     function setLoading(loading) {
         saveButton.disabled = loading;
         saveButton.textContent = loading ? 'Salvando...' : 'Salvar';
@@ -98,6 +119,9 @@ document.addEventListener('DOMContentLoaded', function () {
     cpf.addEventListener('input', function () {
         cpf.value = maskCpf(cpf.value);
     });
+    cpf.addEventListener('blur', function () {
+        cpf.classList.toggle('is-invalid', cpf.value.trim() !== '' && !isValidCpf(cpf.value));
+    });
     telefone.addEventListener('input', function () {
         telefone.value = maskPhone(telefone.value);
     });
@@ -126,6 +150,14 @@ document.addEventListener('DOMContentLoaded', function () {
             observacoes: form.observacoes.value.trim(),
         };
 
+        if (!isValidCpf(cpf.value)) {
+            setMessage('danger', 'CPF inválido. Verifique e tente novamente.');
+            cpf.classList.add('is-invalid');
+            cpf.focus();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setLoading(false);
+            return;
+        }
         try {
             const response = await fetch(mode === 'edit' ? `${window.rupApi.updateBase}/${recordId}` : window.rupApi.create, {
                 method: mode === 'edit' ? 'PUT' : 'POST',
@@ -149,10 +181,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 800);
         } catch (error) {
             setMessage('danger', 'Falha de conexão. Tente novamente.');
+
         } finally {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             setLoading(false);
         }
     });
 
     loadRecord();
 });
+

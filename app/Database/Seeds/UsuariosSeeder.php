@@ -14,7 +14,6 @@ class UsuariosSeeder extends Seeder
             'cpf' => '00000000001',
             'apelido' => 'TESTE',
             'email' => 'email@gmail.com',
-            // Senha em texto puro para este seed: teste123
             'senha' => make_password_hash('teste123'),
             'status' => 'ATIVO',
             'nivel' => 'ADMINISTRADOR',
