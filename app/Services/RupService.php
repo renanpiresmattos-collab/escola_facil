@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\RupModel;
-use CodeIgniter\HTTP\IncomingRequest;
 
 class RupService
 {
@@ -63,6 +62,7 @@ class RupService
     public function salvar(array $input, ?int $id = null): array
     {
         $data = $this->prepareData($input);
+        $this->assertCpfAvailable($data['cpf'], $id);
 
         if ($id === null) {
             $insertId = $this->rupModel->insert($data, true);
@@ -94,6 +94,10 @@ class RupService
             throw new \InvalidArgumentException('Informe um CPF valido.');
         }
 
+        if (! $this->isValidCpf($cpf)) {
+            throw new \InvalidArgumentException('Informe um CPF valido.');
+        }
+
         if ($nome === '') {
             throw new \InvalidArgumentException('Informe o nome.');
         }
@@ -113,6 +117,21 @@ class RupService
             'cep' => $this->normalizeCep((string) ($input['cep'] ?? '')),
             'observacoes' => trim((string) ($input['observacoes'] ?? '')),
         ];
+    }
+
+    private function assertCpfAvailable(string $cpf, ?int $ignoreId = null): void
+    {
+        $query = $this->rupModel->where('cpf', $cpf);
+
+        if ($ignoreId !== null) {
+            $query->where('id !=', $ignoreId);
+        }
+
+        $existing = $query->first();
+
+        if (is_array($existing)) {
+            throw new \InvalidArgumentException('Este CPF já foi cadastrado.');
+        }
     }
 
     private function normalizeCpf(string $cpf): string
@@ -139,5 +158,26 @@ class RupService
         }
 
         return $date;
+    }
+
+    private function isValidCpf(string $cpf): bool
+    {
+        if (strlen($cpf) !== 11 || preg_match('/^(\d)\1{10}$/', $cpf)) {
+            return false;
+        }
+
+        for ($t = 9; $t < 11; $t++) {
+            $sum = 0;
+            for ($i = 0; $i < $t; $i++) {
+                $sum += (int) $cpf[$i] * (($t + 1) - $i);
+            }
+
+            $check = (($sum * 10) % 11) % 10;
+            if ($check !== (int) $cpf[$t]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -30,16 +30,25 @@ class RupController extends BaseController
 
     public function show(int $id): ResponseInterface
     {
-        return api_service_response($this->response, fn () => $this->rupService->findById($id));
+        return api_service_response(
+            $this->response, 
+            fn () => $this->rupService->findById($id)
+        );
     }
 
     public function store(): ResponseInterface
     {
-        return api_service_response($this->response, fn () => $this->rupService->salvar($this->request->getJSON(true) ?? $this->request->getPost()));
+        return api_service_response(
+            $this->response, 
+            fn () => $this->rupService->salvar($this->request->getJSON(true) ?? $this->request->getPost())
+        );
     }
 
     public function update(int $id): ResponseInterface
     {
-        return api_service_response($this->response, fn () => $this->rupService->salvar($this->request->getJSON(true) ?? $this->request->getPost(), $id));
+        return api_service_response(
+            $this->response, 
+            fn () => $this->rupService->salvar($this->request->getJSON(true) ?? $this->request->getPost(), $id)
+        );
     }
 }
